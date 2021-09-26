@@ -1,0 +1,93 @@
+<div class="row">
+
+    <mat-card class="text-center col-6"> FIPE
+        <div class="col">
+            <mat-form-field>
+                <mat-label>Veiculo</mat-label>
+                <mat-select (selectionChange)='getMarcas($event.value)'>
+                    <mat-option value="carros">Carros</mat-option>
+                    <mat-option value="motos">Motos</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <mat-form-field>
+                <mat-label>Marcas</mat-label>
+                <mat-select (selectionChange)='getModelos($event.value)'>
+                    <mat-option *ngFor="let marca of marcas" [value]="marca.codigo">
+                        {{marca.nome}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field>
+                <mat-label>Modelos</mat-label>
+                <mat-select (selectionChange)='getAnos($event.value)'>
+                    <mat-option *ngFor="let modelo of modelos" [value]="modelo.codigo">
+                        {{modelo.nome}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field>
+                <mat-label>Anos</mat-label>
+                <mat-select (selectionChange)='getResultado($event.value)'>
+                    <mat-option *ngFor="let ano of anos" [value]="ano.codigo">
+                        {{ano.nome}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </mat-card>
+
+    <mat-card class="text-center col-6" *ngIf="resultadoFipe" class="col">
+        <div>
+            Valor: {{resultadoFipe.Valor}}
+        </div>
+        <div>
+            Mês Referência FIPE: {{resultadoFipe.MesReferencia}}
+        </div>
+        <br/>
+        <div>
+            <mat-form-field>
+                <mat-label>Valor Total</mat-label>
+                <input matInput #valorTotal type="number" placeholder="0,00" min="0" step="0.01">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Entrada</mat-label>
+                <input matInput #entrada type="number" placeholder="7500" min="0" step="0.01">
+            </mat-form-field>
+            <div>
+                Digite o valor sem o "." de milhar,<br/> apenas com o "," de centavos<br/>
+            </div>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Nº Parcelas</mat-label>
+                <input matInput #numParcelas type="number" maxlength="2" min="12" max="72" placeholder="Ex. 36" step="12" value="36">
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Taxa de Juros/Financiamento</mat-label>
+                <input matInput #taxaJuros type="number" placeholder="0,7" min="0" step="0.01">
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" (click)="calcular()">Calcular</button>
+        <div class="mt-3">
+            <mat-form-field>
+                <mat-label>Parcela Ideal</mat-label>
+                <input matInput #parcelaTotal placeholder="R$ 0,00" min="0" step="0.01" value="{{parcelaTotalResult}}">
+            </mat-form-field>
+        </div>
+
+
+    </mat-card>
+
+</div>
