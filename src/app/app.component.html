@@ -1,57 +1,62 @@
 <div class="row">
 
-    <mat-card class="text-center col-6"> FIPE
-        <div class="col">
-            <mat-form-field>
-                <mat-label>Veiculo</mat-label>
-                <mat-select (selectionChange)='getMarcas($event.value)'>
-                    <mat-option value="carros">Carros</mat-option>
-                    <mat-option value="motos">Motos</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="col">
-            <mat-form-field>
-                <mat-label>Marcas</mat-label>
-                <mat-select (selectionChange)='getModelos($event.value)'>
-                    <mat-option *ngFor="let marca of marcas" [value]="marca.codigo">
-                        {{marca.nome}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+    <mat-card class="text-center col-12 col-md-6"> 
+        <div>
+            FIPE
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Veiculo</mat-label>
+                    <mat-select (selectionChange)='getMarcas($event.value)'>
+                        <mat-option value="carros">Carros</mat-option>
+                        <mat-option value="motos">Motos</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Marcas</mat-label>
+                    <mat-select (selectionChange)='getModelos($event.value)'>
+                        <mat-option *ngFor="let marca of marcas" [value]="marca.codigo">
+                            {{marca.nome}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
 
-        <div>
-            <mat-form-field>
-                <mat-label>Modelos</mat-label>
-                <mat-select (selectionChange)='getAnos($event.value)'>
-                    <mat-option *ngFor="let modelo of modelos" [value]="modelo.codigo">
-                        {{modelo.nome}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div>
-            <mat-form-field>
-                <mat-label>Anos</mat-label>
-                <mat-select (selectionChange)='getResultado($event.value)'>
-                    <mat-option *ngFor="let ano of anos" [value]="ano.codigo">
-                        {{ano.nome}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div *ngIf="resultadoFipe">
             <div>
-                Valor: {{resultadoFipe.Valor || currency}}
+                <mat-form-field>
+                    <mat-label>Modelos</mat-label>
+                    <mat-select (selectionChange)='getAnos($event.value)'>
+                        <mat-option *ngFor="let modelo of modelos" [value]="modelo.codigo">
+                            {{modelo.nome}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
             <div>
-                Mês Referência FIPE: {{resultadoFipe.MesReferencia}}
+                <mat-form-field>
+                    <mat-label>Anos</mat-label>
+                    <mat-select (selectionChange)='getResultado($event.value)'>
+                        <mat-option *ngFor="let ano of anos" [value]="ano.codigo">
+                            {{ano.nome}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div *ngIf="resultadoFipe">
+                <div>
+                    Valor: {{resultadoFipe.Valor || currency}}
+                </div>
+                <div>
+                    Mês Referência FIPE: {{resultadoFipe.MesReferencia}}
+                </div>
             </div>
         </div>
+        
     </mat-card>
 
-    <mat-card class="text-center col-6" class="col">
+    <mat-card class="text-center col-12 col-md-6">
+        Calculadora de Financimento
         <div>
             <mat-form-field>
                 <mat-label>Valor do Veículo</mat-label>
