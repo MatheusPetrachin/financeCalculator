@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { Marca, modelAnoModelo, resultadoFipe } from './app.model';
 import { AppService } from './app.services';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,6 +30,8 @@ export class AppComponent implements OnInit{
   codigoModelo: string;
   codigoAno: string;
   parcelaTotalResult: string;
+  valorFIPE: string;
+  taxaJurosCalculado: string;
   
   constructor(private appService:AppService) { }
 
@@ -52,23 +55,35 @@ export class AppComponent implements OnInit{
 
   getResultado(value: string){
     this.codigoAno = value;
-    this.appService.getResultado(this.codigoVeiculo, this.codigoMarca, this.codigoModelo, this.codigoAno).subscribe(data => {this.resultadoFipe = data});
+    this.appService.getResultado(this.codigoVeiculo, this.codigoMarca, this.codigoModelo, this.codigoAno).subscribe(data => {
+      this.resultadoFipe = data;
+      this.valorFIPE = this.resultadoFipe.Valor;
+      
+    });
   }
 
   calcular() {
 
-    var valorTotal = this.valorTotal.nativeElement.value;
-    var entrada = this.entrada.nativeElement.value;
+    var valorTotal = this.valorTotal.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", ".");
+    var entrada = this.entrada.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", ".");
+        
     var numParcelas = this.numParcelas.nativeElement.value;
     var taxaJuros = this.taxaJuros.nativeElement.value/100;
     var valorFinanciado = valorTotal-entrada;
+    var parcelaTotal = this.parcelaTotal.nativeElement.value;
 
-    this.parcelaTotalResult = ((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2);
-
-    console.log(this.valorTotal.nativeElement.value);
-    console.log(this.entrada.nativeElement.value);
-    console.log(this.numParcelas.nativeElement.value);
-    console.log(this.taxaJuros.nativeElement.value);
-    console.log(this.parcelaTotal.nativeElement.value);
+    // if (parcelaTotal)
+    // {
+    //   var parcela = parcelaTotal.replace("R$ ", "").replace(".", "").replace(",", ".");
+    //   var VF = numParcelas*parcela;
+    //   var VP = valorFinanciado;
+    //   var division = VF/VP;
+    //   this.taxaJurosCalculado = (Math.pow(division, (1/numParcelas))-1).toFixed(3);
+    // }
+    // else
+    // {
+      this.parcelaTotalResult = ((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2);
+    // }
+        
   }
 }
