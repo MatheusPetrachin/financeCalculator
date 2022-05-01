@@ -78,14 +78,14 @@
         <div>
             <mat-form-field>
                 <mat-label>Taxa de Juros/Financiamento</mat-label>
-                <input matInput #taxaJuros type="number" placeholder="0.7" min="0" value="{{taxaJurosCalculado}}">
+                <input matInput #taxaJuros type="number" placeholder="0.7" min="0">
             </mat-form-field>
         </div>
         <button mat-raised-button color="primary" (click)="calcular()">Calcular</button>
         <div class="mt-3">
             <mat-form-field>
                 <mat-label>Parcela Ideal</mat-label>
-                <input currencyMask matInput #parcelaTotal value="{{parcelaTotalResult}}">
+                <input currencyMask matInput #parcelaTotal>
             </mat-form-field>
         </div>
 

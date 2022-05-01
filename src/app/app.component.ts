@@ -31,7 +31,6 @@ export class AppComponent implements OnInit{
   codigoAno: string;
   parcelaTotalResult: string;
   valorFIPE: string;
-  taxaJurosCalculado: string;
   
   constructor(private appService:AppService) { }
 
@@ -70,20 +69,36 @@ export class AppComponent implements OnInit{
     var numParcelas = this.numParcelas.nativeElement.value;
     var taxaJuros = this.taxaJuros.nativeElement.value/100;
     var valorFinanciado = valorTotal-entrada;
-    var parcelaTotal = this.parcelaTotal.nativeElement.value;
+    var parcelaTotal = parseFloat(this.parcelaTotal.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", "."));    
 
-    // if (parcelaTotal)
-    // {
-    //   var parcela = parcelaTotal.replace("R$ ", "").replace(".", "").replace(",", ".");
-    //   var VF = numParcelas*parcela;
-    //   var VP = valorFinanciado;
-    //   var division = VF/VP;
-    //   this.taxaJurosCalculado = (Math.pow(division, (1/numParcelas))-1).toFixed(3);
-    // }
-    // else
-    // {
-      this.parcelaTotalResult = ((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2);
-    // }
+    if (parcelaTotal)
+    {
+      taxaJuros = 0.000000;
+      do
+      {        
+        taxaJuros += 0.000001;
+        var calc = parseFloat(((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2));
+
+        if (calc > parcelaTotal)
+        {
+          alert("Parcela ira resultar em uma taxa de Juros inválida... Por favor insira um valor maior para o calculo!" + taxaJuros);
+          break;
+        }
         
+      }while(parcelaTotal != calc);  
+      
+      taxaJuros = taxaJuros*100;
+      this.taxaJuros.nativeElement.value = taxaJuros.toFixed(2);
+    }
+    else if (taxaJuros)
+    {
+      this.parcelaTotal.nativeElement.value = "R$ " + ((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2).replace(".", ",");
+    }        
+  }
+
+  printCalc(taxaJuros: number, parcelaTotal: any, calc: string)
+  {    
+    console.log(taxaJuros); 
+    console.log(parcelaTotal + " - " + calc);  
   }
 }
