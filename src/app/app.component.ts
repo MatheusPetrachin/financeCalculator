@@ -14,6 +14,7 @@ export class AppComponent implements OnInit{
 
   @ViewChild("valorTotal") valorTotal: ElementRef;
   @ViewChild("entrada") entrada: ElementRef;
+  @ViewChild("parcelaResidual") parcelaResidual: ElementRef;
   @ViewChild("numParcelas") numParcelas: ElementRef;
   @ViewChild("taxaJuros") taxaJuros: ElementRef;
   @ViewChild("parcelaTotal") parcelaTotal: ElementRef;
@@ -65,26 +66,36 @@ export class AppComponent implements OnInit{
 
     var valorTotal = this.valorTotal.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", ".");
     var entrada = this.entrada.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", ".");
+    var parcelaResidual = this.parcelaResidual.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", ".");
         
-    var numParcelas = this.numParcelas.nativeElement.value;
+    var numParcelas = parseFloat(this.numParcelas.nativeElement.value);
     var taxaJuros = this.taxaJuros.nativeElement.value/100;
-    var valorFinanciado = valorTotal-entrada;
+    var valorFinanciado = valorTotal-entrada-parcelaResidual;
     var parcelaTotal = parseFloat(this.parcelaTotal.nativeElement.value.replace("R$ ", "").replace(".", "").replace(",", "."));    
 
     if (parcelaTotal)
     {
-      taxaJuros = 0.000000;
+      taxaJuros = 0;
       do
-      {        
-        taxaJuros += 0.000001;
-        var calc = parseFloat(((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2));
-
-        if (calc > parcelaTotal)
+      {   
+        var calc = 0;  
+        if (taxaJuros == 0)
         {
-          alert("Parcela ira resultar em uma taxa de Juros inválida... Por favor insira um valor maior para o calculo!" + taxaJuros);
-          break;
+          calc = parseFloat((valorFinanciado/numParcelas).toFixed(2));
+        }   
+        else
+        {
+          calc = parseFloat(((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2));
         }
         
+        if (calc > parcelaTotal)
+        {
+          var valorMinimo = (valorFinanciado/numParcelas).toFixed(2);
+          alert("Parcela inválida... A parcela para resultar em taxa zero é R$" + valorMinimo.replace(".", ","));
+          break;
+        }
+
+        taxaJuros += 0.000001;
       }while(parcelaTotal != calc);  
       
       taxaJuros = taxaJuros*100;
@@ -94,6 +105,11 @@ export class AppComponent implements OnInit{
     {
       this.parcelaTotal.nativeElement.value = "R$ " + ((valorFinanciado*taxaJuros)/(1-(1+taxaJuros) ** (- numParcelas))).toFixed(2).replace(".", ",");
     }        
+  }
+
+  clearParcelaIdeal()
+  {
+    this.parcelaTotal.nativeElement.value = "";
   }
 
   printCalc(taxaJuros: number, parcelaTotal: any, calc: string)
