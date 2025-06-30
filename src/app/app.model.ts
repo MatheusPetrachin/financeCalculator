@@ -24,3 +24,24 @@ export class resultadoFipe{
     TipoVeiculo: number;
     SiglaCombustivel: string
 }
+
+export class TaxaJuros {
+    Posicao: number;
+    InstituicaoFinanceira: string;
+    TaxaJurosAoMes: string;
+    TaxaJurosAoAno: string;
+}
+
+export class ResultadoTaxaJuros {
+    conteudo: TaxaJuros[];
+}
+
+export class PeriodoDisponivel {
+    inicioPeriodo: string;
+    fimPeriodo: string;
+}
+
+export class PeriodosDisponiveis {
+    "@odata.context": string;
+    value: PeriodoDisponivel[];
+}

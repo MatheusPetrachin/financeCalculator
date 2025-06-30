@@ -83,6 +83,22 @@
         </div>
         <div>
             <mat-form-field class="col-10">
+                <mat-label>Banco/Instituição Financeira</mat-label>
+                <mat-select (selectionChange)='selecionarTaxaJuros($event.value)' placeholder="Selecione um banco">
+                    <mat-option *ngFor="let taxa of taxasJuros" [value]="taxa">
+                        {{taxa.InstituicaoFinanceira}} - {{taxa.TaxaJurosAoMes}}% ao mês ({{taxa.TaxaJurosAoAno}}% ao ano)
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="carregandoTaxas" class="text-center">
+                <small>Carregando taxas de juros...</small>
+            </div>
+            <div *ngIf="taxasJuros.length > 0 && !carregandoTaxas" class="text-center">
+                <small>Taxas atualizadas em: {{dataTaxasJuros || 'Data mais recente disponível'}}</small>
+            </div>
+        </div>
+        <div>
+            <mat-form-field class="col-10">
                 <mat-label>Taxa de Juros/Financiamento</mat-label>
                 <input matInput #taxaJuros type="number" placeholder="0.7" min="0" (change)="clearParcelaIdeal()">
             </mat-form-field>

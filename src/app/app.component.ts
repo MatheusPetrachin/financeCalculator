@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Marca, modelAnoModelo, resultadoFipe } from './app.model';
+import { Marca, modelAnoModelo, resultadoFipe, TaxaJuros, ResultadoTaxaJuros } from './app.model';
 import { AppService } from './app.services';
 
 
@@ -25,6 +25,9 @@ export class AppComponent implements OnInit{
   modelos: modelAnoModelo[] = [];
   anos: modelAnoModelo[] = [];
   resultadoFipe: resultadoFipe;
+  taxasJuros: TaxaJuros[] = [];
+  dataTaxasJuros: string = '';
+  carregandoTaxas: boolean = false;
 
   codigoVeiculo: string;
   codigoMarca: string;
@@ -36,6 +39,7 @@ export class AppComponent implements OnInit{
   constructor(private appService:AppService) { }
 
   ngOnInit(): void {
+    this.getTaxasJuros();
   }
 
   getMarcas(value: string){
@@ -60,6 +64,43 @@ export class AppComponent implements OnInit{
       this.valorFIPE = this.resultadoFipe.Valor;
       
     });
+  }
+
+  getTaxasJuros(){
+    this.carregandoTaxas = true;
+    this.appService.getTaxasJuros().subscribe(
+      data => {
+        this.taxasJuros = data.conteudo;
+        this.carregandoTaxas = false;
+        console.log('Taxas de juros carregadas:', this.taxasJuros);
+      },
+      error => {
+        console.error('Erro ao carregar taxas de juros:', error);
+        this.carregandoTaxas = false;
+        // Fallback: usar uma data conhecida que funciona
+        this.getTaxasJurosFallback();
+      }
+    );
+  }
+
+  getTaxasJurosFallback(){
+    this.appService.getTaxasJurosFallback().subscribe(
+      data => {
+        this.taxasJuros = data.conteudo;
+        this.dataTaxasJuros = '2025-06-06 (fallback)';
+        console.log('Taxas de juros carregadas (fallback):', this.taxasJuros);
+      },
+      error => {
+        console.error('Erro no fallback também:', error);
+      }
+    );
+  }
+
+  selecionarTaxaJuros(taxa: TaxaJuros){
+    // Converte a taxa de juros ao mês para número e define no campo
+    const taxaNumerica = parseFloat(taxa.TaxaJurosAoMes.replace(',', '.'));
+    this.taxaJuros.nativeElement.value = taxaNumerica.toFixed(2);
+    this.clearParcelaIdeal();
   }
 
   calcular() {
