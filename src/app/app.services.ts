@@ -17,19 +17,19 @@ export class AppService {
 
     constructor(private http: HttpClient) { }
 
-    getMarcas(codigoVeiculo){
-        return this.http.get<Marca[]>(this.APIFipeUrl + codigoVeiculo + '/marcas');        
+    getMarcas(codigoVeiculo) {
+        return this.http.get<Marca[]>(this.APIFipeUrl + codigoVeiculo + '/marcas');
     }
 
-    getModelos(codigoVeiculo: string, codigoMarca: string){
+    getModelos(codigoVeiculo: string, codigoMarca: string) {
         return this.http.get<Modelo>(this.APIFipeUrl + codigoVeiculo + '/marcas/' + codigoMarca + '/modelos');
     }
 
-    getAnos(codigoVeiculo: string, codigoMarca: string, codigoModelo: string){
-        return this.http.get<modelAnoModelo[]>(this.APIFipeUrl + codigoVeiculo + '/marcas/' + codigoMarca + '/modelos/' + codigoModelo + '/anos' );
+    getAnos(codigoVeiculo: string, codigoMarca: string, codigoModelo: string) {
+        return this.http.get<modelAnoModelo[]>(this.APIFipeUrl + codigoVeiculo + '/marcas/' + codigoMarca + '/modelos/' + codigoModelo + '/anos');
     }
 
-    getResultado(codigoVeiculo: string, codigoMarca: string, codigoModelo: string, codigoAno: string){
+    getResultado(codigoVeiculo: string, codigoMarca: string, codigoModelo: string, codigoAno: string) {
         return this.http.get<resultadoFipe>(this.APIFipeUrl + codigoVeiculo + '/marcas/' + codigoMarca + '/modelos/' + codigoModelo + '/anos/' + codigoAno);
     }
 
@@ -39,9 +39,20 @@ export class AppService {
                 // Pega o primeiro período (mais recente)
                 const periodoMaisRecente = periodos.value[0];
                 const dataInicio = periodoMaisRecente.inicioPeriodo;
-                
-                const url = this.APIBCBUrl + `atual?filtro=(codigoSegmento%20eq%20%271%27)%20and%20(codigoModalidade%20eq%20%27401101%27)%20and%20(InicioPeriodo%20eq%20%27${dataInicio}%27)`;
-                return this.http.get<ResultadoTaxaJuros>(url);
+
+                return this.http.get<ResultadoTaxaJuros>(this.APIBCBUrl + `atual?filtro=(codigoSegmento%20eq%20%271%27)%20and%20(codigoModalidade%20eq%20%27401101%27)%20and%20(InicioPeriodo%20eq%20%27${dataInicio}%27)`);
+            })
+        );
+    }
+
+    getTaxasJurosFallback(): Observable<ResultadoTaxaJuros> {
+        return this.getPeriodosDisponiveis().pipe(
+            switchMap(periodos => {
+                // Pega o primeiro período (mais recente)
+                const periodoMaisRecente = periodos.value[0];
+                const dataInicio = periodoMaisRecente.inicioPeriodo;
+
+                return this.http.get<ResultadoTaxaJuros>(this.APIBCBUrl + `atual?filtro=(codigoSegmento%20eq%20%271%27)%20and%20(codigoModalidade%20eq%20%27401101%27)%20and%20(InicioPeriodo%20eq%20%27${dataInicio}%27)`);
             })
         );
     }
@@ -50,10 +61,4 @@ export class AppService {
         const url = this.APIBCBPeriodosUrl + 'PeriodosDisponiveis';
         return this.http.get<PeriodosDisponiveis>(url);
     }
-
-    getTaxasJurosFallback(): Observable<ResultadoTaxaJuros> {
-        const url = this.APIBCBUrl + `atual?filtro=(codigoSegmento%20eq%20%271%27)%20and%20(codigoModalidade%20eq%20%27401101%27)%20and%20(InicioPeriodo%20eq%20%272025-06-06%27)`;
-        return this.http.get<ResultadoTaxaJuros>(url);
-    }
-
 }
