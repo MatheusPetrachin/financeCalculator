@@ -7,7 +7,7 @@
         "serve": "set NODE_OPTIONS=--openssl-legacy-provider && ng serve",
         "build": "set NODE_OPTIONS=--openssl-legacy-provider && ng build",
         "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider && ng build --configuration=production",
-        "deploy": "ng deploy --base-href=https://MatheusPetrachin.github.io/financeCalculator/",
+        "deploy": "set NODE_OPTIONS=--openssl-legacy-provider && ng deploy --base-href=https://MatheusPetrachin.github.io/financeCalculator/",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",

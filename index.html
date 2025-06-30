@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>Finance Calculator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="0; url=./">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -29,33 +28,31 @@
             font-size: 1.2em;
             margin-bottom: 30px;
         }
-        .loading {
+        .btn {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        a {
-            color: #fff;
-            text-decoration: underline;
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🧮 Finance Calculator</h1>
-        <p>Redirecionando para o aplicativo...</p>
-        <div class="loading"></div>
-        <p style="margin-top: 30px;">
-            Se não for redirecionado automaticamente, 
-            <a href="./">clique aqui</a>
-        </p>
+        <p>Bem-vindo ao seu calculador financeiro!</p>
+        <p>Clique no botão abaixo para acessar o aplicativo:</p>
+        <a href="./" class="btn">🚀 Acessar Aplicativo</a>
     </div>
 </body>
 </html> 
